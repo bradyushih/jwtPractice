@@ -2,9 +2,12 @@ package com.example.jwt.assembler;
 
 import com.example.jwt.controller.ProductApi;
 import com.example.jwt.entity.Product;
+import com.example.jwt.model.ProductModel;
+import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -22,4 +25,12 @@ public class ProductAssembler implements RepresentationModelAssembler<Product, E
 
         return productModel;
     }
+
+//    @Override
+//    public ProductModel toModel(Product entity) {
+//        ProductModel model = new ProductModel();
+//
+//        BeanUtils.copyProperties(entity, model);
+//        return model;
+//    }
 }

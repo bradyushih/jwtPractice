@@ -4,6 +4,7 @@ import com.example.jwt.assembler.ProductAssembler;
 import com.example.jwt.config.ApiRestController;
 import com.example.jwt.entity.Product;
 import com.example.jwt.jpa.ProductRepository;
+import com.example.jwt.model.ProductModel;
 import com.example.jwt.service.ProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUpload;
@@ -63,16 +64,16 @@ public class ProductApi {
 
     @GetMapping("/page")
     @RolesAllowed({"ROLE_CUSTOMER", "ROLE_EDITOR"})
-    public Page<Product> list(
+    public PagedModel<EntityModel<Product>> list(
             @RequestParam(defaultValue = "") String name,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "") List<String> sortList,
             @RequestParam(defaultValue = "DESC") String sortOrder) {
-        return productService.fetchProductDataAsPageWithFilteringAndSorting(name, page, size, sortList, sortOrder);
+        Page<Product> prodPage = productService.fetchProductDataAsPageWithFilteringAndSorting(name, page, size, sortList, sortOrder);
 //        System.out.println(prodPage.getContent());
 //        PagedModel<EntityModel<Product>> a = pageProdAssembler.toModel(prodPage);
-//        return pageProdAssembler.toModel(prodPage, prodAssembler);
+        return pageProdAssembler.toModel(prodPage, prodAssembler);
 //        return prodRepo.findAll(pageable);
     }
 
