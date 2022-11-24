@@ -18,9 +18,12 @@ public class JwtTokenUtil {
     private String SECRET_KEY;
 
     public String generateAccessToken(User user){
+        log.info("roles: {}", user.roles());
+        log.info("roles toString: {}", user.roles().toString());
         return Jwts.builder()
                 .setSubject(String.format("%s,%s", user.id(), user.email()))
                 .setIssuer("CodeJava")
+                .claim("roles", user.roles().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
@@ -49,7 +52,7 @@ public class JwtTokenUtil {
         return parseClaims(token).getSubject();
     }
 
-    private Claims parseClaims(String token){
+    public Claims parseClaims(String token){
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)

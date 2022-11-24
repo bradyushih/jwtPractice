@@ -2,6 +2,7 @@ package com.example.jwt.entity;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "products")
 @Data
-public class Product {
+public class Product extends RepresentationModel<Product> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

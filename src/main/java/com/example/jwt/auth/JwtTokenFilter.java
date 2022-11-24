@@ -1,7 +1,10 @@
 package com.example.jwt.auth;
 
+import com.example.jwt.entity.Role;
 import com.example.jwt.entity.User;
 import com.example.jwt.util.JwtTokenUtil;
+import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,8 +20,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Component
+@Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -57,8 +62,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private void setAuthenticationContext(String token, HttpServletRequest req){
         UserDetails userDetails = getUserDetails(token);
-
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+        log.info("author: {}", userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
@@ -67,7 +72,22 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private UserDetails getUserDetails(String token){
         User userDetails = new User();
-        String[] jwtSubject = jwtUtil.getSubject(token).split(",");
+        Claims claims = jwtUtil.parseClaims(token);
+        String subject = (String) claims.get(Claims.SUBJECT);
+        log.info("class: {}", claims.get("roles").getClass());
+//        ArrayList<String> roleNames = (ArrayList) claims.get("roles");
+        String roles = (String) claims.get("roles");
+        roles = roles.replace("[", "").replace("]", "");
+        String[] roleNames = roles.split(",");
+
+
+        for (String aRoleName :
+                roleNames) {
+            log.info("add role to userDetails: {}", aRoleName);
+            userDetails.addRole(new Role(aRoleName.strip()));
+        }
+        log.info("author: {}", userDetails.getAuthorities());
+        String[] jwtSubject = subject.split(",");
 
         userDetails.id(Integer.parseInt(jwtSubject[0]));
         userDetails.email(jwtSubject[1]);

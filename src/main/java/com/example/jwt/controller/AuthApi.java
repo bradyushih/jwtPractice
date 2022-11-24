@@ -2,6 +2,7 @@ package com.example.jwt.controller;
 
 import com.example.jwt.auth.AuthRequest;
 import com.example.jwt.auth.AuthResponse;
+import com.example.jwt.config.ApiRestController;
 import com.example.jwt.entity.User;
 import com.example.jwt.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@RestController
 @Slf4j
+@ApiRestController
 public class AuthApi {
     @Autowired AuthenticationManager authManager;
     @Autowired JwtTokenUtil jwtUtil;
@@ -35,6 +36,7 @@ public class AuthApi {
             );
 
             User user = (User) authentication.getPrincipal();
+            log.info("{}",user.getRoles());
             String accessToken = jwtUtil.generateAccessToken(user);
             AuthResponse response = new AuthResponse(user.email(), accessToken);
 

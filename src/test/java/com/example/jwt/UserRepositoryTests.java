@@ -2,6 +2,7 @@ package com.example.jwt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.example.jwt.entity.Role;
 import com.example.jwt.entity.User;
 import com.example.jwt.jpa.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -20,16 +21,26 @@ public class UserRepositoryTests {
     @Autowired
     private UserRepository userRepo;
 
-    @Test
-    public void testCreateUser(){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String password = passwordEncoder.encode("nam2020");
-
-        User newUser = new User().email("nam@codejava.net").password(password);
-        User savedUser = userRepo.save(newUser);
-
-        System.out.println("123");
-        Assertions.assertThat(savedUser).isNotNull();
-        Assertions.assertThat(savedUser.id()).isGreaterThan(0);
-    }
+//    @Test
+//    public void testCreateUser(){
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String password = passwordEncoder.encode("car2021");
+//
+//        User newUser = new User().email("car@codejava.net").password(password);
+//        User savedUser = userRepo.save(newUser);
+//
+//        Assertions.assertThat(savedUser).isNotNull();
+//        Assertions.assertThat(savedUser.id()).isGreaterThan(0);
+//    }
+//
+//    @Test
+//    public void testAssignRoleToUser(){
+//        Integer userId = 1;
+//        User user = userRepo.findById(userId).get();
+//        user.addRole(new Role(1));
+//        user.addRole(new Role(2));
+//
+//        User updateUser = userRepo.save(user);
+//        assertThat(updateUser.getRoles()).hasSize(2);
+//    }
 }

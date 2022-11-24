@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -38,6 +39,15 @@ public class User implements UserDetails {
     public void addRole(Role role){
         this.roles.add(role);
     }
+
+    public Set<Role> getRoles(){
+        return roles;
+    }
+    /*public Set<String> getRoles(){
+        return roles.stream()
+                .map(x -> x.name())
+                .collect(Collectors.toSet());
+    }*/
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();

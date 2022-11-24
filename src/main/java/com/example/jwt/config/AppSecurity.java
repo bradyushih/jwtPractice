@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true, securedEnabled = false, jsr250Enabled = true
+)
 public class AppSecurity {
 
     @Autowired
@@ -59,7 +63,8 @@ public class AppSecurity {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests()
+        http.antMatcher("/api")
+                .authorizeRequests()
                 .antMatchers("/auth/login", "/docs/**", "/users").permitAll()
                 .anyRequest().authenticated();
 

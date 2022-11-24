@@ -1,15 +1,19 @@
 server:
   port: 8081
 
+api:
+  path:
+    global-prefix: /api
+
 spring:
   profiles:
     active: local
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_SCHEMA}?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_SCHEMA:productsdb}?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:1qaz2wsx}
 
   jpa:
     hibernate:
